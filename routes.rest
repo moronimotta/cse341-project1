@@ -1,0 +1,14 @@
+
+// DEVELOPMENT
+### GET /contacts
+GET http://localhost:8080/contacts
+
+### GET /contacts/66e8e4d6b392f5e5af665987
+GET http://localhost:8080/contacts/66e8e4d6b392f5e5af665987
+
+// PRODUCTION
+### GET /contacts
+GET https://cse341-project1-fhhx.onrender.com/contacts
+
+### GET /contacts/66e8e4d6b392f5e5af665987
+GET https://cse341-project1-fhhx.onrender.com/contacts/66e8e4d6b392f5e5af665987
