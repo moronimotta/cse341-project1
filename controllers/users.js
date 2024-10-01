@@ -5,13 +5,24 @@ dotenv.config();
 const userCollection = 'users';
 const ObjectId = require('mongodb').ObjectId;
 
-const getUser = async (req, res) => {
+const getUser = async (req, res, next) => {
+    
+    const user = req.user;
+    const role = user.role || 'user';
+
     // swagger-tags=['Users']
     let db = mongodb.getDb();
     const id = req.params.id;
     const result = await db.collection(userCollection).find({ _id: new ObjectId(id) });
     result.toArray().then((users) => {
         res.setHeader('Content-Type', 'application/json');
+
+        // compare both to see if they are the same user
+        if (users[0]._id.toString() !== user._id.toString() && role !== 'admin') {
+            res.status(401).json({ message: 'You are only authorize to view your information' });
+            return;
+        }
+
         res.send(JSON.stringify(users[0]));
     });
 }
