@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb');
+const createError = require('http-errors');
 require('dotenv').config();
 
 const uri = process.env.MONGODB_URI;
@@ -16,13 +17,13 @@ const initDb = (callback) => {
       callback(null, _db);
     })
     .catch((err) => {
-      callback(err);
+      callback(createError(500, 'Failed to connect to the database', { cause: err }));
     });
 };
 
 const getDb = () => {
   if (!_db) {
-    throw new Error('DB not initialized');
+    throw createError(500, 'DB not initialized');
   }
   return _db;
 };

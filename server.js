@@ -2,11 +2,16 @@ const express = require('express');
 const app = express();
 const mongodb = require('./data/database');
 const bodyParser = require('body-parser');
+const createError = require('http-errors');
 
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use('/', require('./routes/index'));
+
+app.use((req, res, next) => {
+  res.json(createError(404, 'Not Found'));
+});
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');

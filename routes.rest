@@ -1,0 +1,59 @@
+
+// DEVELOPMENT
+
+### GET /users (Role Customer)
+GET http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+email: moroni.art.motta@gmail.com
+password: 123456789
+
+### GET /users (Role Admin)
+GET http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+email: joesmith@gmail.com
+password: isawapillaroflight
+
+### POST /users
+POST http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+email: joesmith@gmail.com
+password: isawapillaroflight
+
+{
+  "age": "22",
+  "document": "98765432101234",
+  "last_name": "Doe",
+  "name": "John",
+  "password": "dummypassword",
+  "role": "admin",
+  "email": "example@gmail.com"
+}
+### PUT /users/66fb4624f0c67c4d63214ae5
+PUT http://localhost:8080/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+Content-Type: application/json
+email: joesmith@gmail.com
+password: isawapillaroflight
+
+{
+    
+"age": "75",
+}
+
+### GET /users/66fb4624f0c67c4d63214ae5 (Using Admin Role)
+GET http://localhost:8080/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+Content-Type: application/json
+email: joesmith@gmail.com
+password: isawapillaroflight
+
+### GET /users/66fb4624f0c67c4d63214ae6 (Using Customer Role)
+GET http://localhost:8080/users/66fb4624f0c67c4d63214ae6 HTTP/1.1
+Content-Type: application/json
+email: moroni.art.motta@gmail.com
+password: 123456789
+
+### DELETE /users/66fb4624f0c67c4d63214ae5
+DELETE http://localhost:8080/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+Content-Type: application/json
+email: joesmith@gmail.com
+password: isawapillaroflight
+

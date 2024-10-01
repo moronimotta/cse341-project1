@@ -1,12 +1,13 @@
 const mongodb = require('../data/database');
 const dotenv = require('dotenv');
+const createError = require('http-errors');
 dotenv.config();
 
 const userCollection = 'users';
 const ObjectId = require('mongodb').ObjectId;
 
 const getUser = async (req, res, next) => {
-    
+  try {
     const user = req.user;
     const role = user.role || 'user';
 
@@ -14,56 +15,77 @@ const getUser = async (req, res, next) => {
     let db = mongodb.getDb();
     const id = req.params.id;
     const result = await db.collection(userCollection).find({ _id: new ObjectId(id) });
-    result.toArray().then((users) => {
-        res.setHeader('Content-Type', 'application/json');
+    const users = await result.toArray();
 
-        // compare both to see if they are the same user
-        if (users[0]._id.toString() !== user._id.toString() && role !== 'admin') {
-            res.status(401).json({ message: 'You are only authorize to view your information' });
-            return;
-        }
+    res.setHeader('Content-Type', 'application/json');
 
-        res.send(JSON.stringify(users[0]));
-    });
-}
+    // compare both to see if they are the same user
+    if (users[0]._id.toString() !== user._id.toString() && role !== 'admin') {
+        throw res.json(createError(403, 'Forbidden'));
+    }
 
-const getUsers = async (req, res) => {
+    res.status(200).json(users[0]);
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+  }
+};
+
+const getUsers = async (req, res, next) => {
+  try {
     // swagger-tags=['Users']
     let db = mongodb.getDb();
     const result = await db.collection(userCollection).find();
-    result.toArray().then((users) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(users));
-    });
-}
+    const users = await result.toArray();
 
-const updateUser = async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(users);
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+}
+};
+
+const updateUser = async (req, res, next) => {
+  try {
     // swagger-tags=['Users']
     let db = mongodb.getDb();
     const id = req.params.id;
     const user = req.body;
-    db.collection(userCollection).updateOne({ _id: new ObjectId(id) }, { $set: user });
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(user));
-}
+    await db.collection(userCollection).updateOne({ _id: new ObjectId(id) }, { $set: user });
 
-const createUser = async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(204).json(user);
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+  }
+};
+
+const createUser = async (req, res, next) => {
+  try {
     // swagger-tags=['Users']
     let db = mongodb.getDb();
     const user = req.body;
     await db.collection(userCollection).insertOne(user);
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(user));
-}
 
-const deleteUser = async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(201).json(user);
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
     // swagger-tags=['Users']
     let db = mongodb.getDb();
     const id = req.params.id;
-    db.collection(userCollection).deleteOne({ _id: new ObjectId(id) });
+    await db.collection(userCollection).deleteOne({ _id: new ObjectId(id) });
+
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({}));
-}
+    res.status(204).send();
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+  }
+};
 
 module.exports = {
     getUser,
