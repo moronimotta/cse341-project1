@@ -5,7 +5,7 @@
     "description": "Webservice for weeks 3-4",
     "version": "1.0.0"
   },
-  "host": "https://cse341-project1-1-uaff.onrender.com",
+  "host": "cse341-project1-1-uaff.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
