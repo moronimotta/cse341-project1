@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use('/', require('./routes/index'));
 
 app.use((req, res, next) => {
-  res.json(createError(404, 'Not Found'));
+  throw res.status(404).json({ message: 'Page not found.' });
 });
 
 app.use((req, res, next) => {
