@@ -8,108 +8,39 @@
   "host": "localhost:8080",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
+  "parameters": {
+    "emailHeader": {
+      "name": "email",
+      "in": "header",
+      "required": true,
+      "type": "string",
+      "description": "User email"
+    },
+    "passwordHeader": {
+      "name": "password",
+      "in": "header",
+      "required": true,
+      "type": "string",
+      "description": "User password"
+    }
+  },
   "paths": {
-    "/api-docs": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/bank-accounts/": {
-      "get": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/bank-accounts/{id}": {
-      "get": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/users/": {
       "get": {
         "description": "",
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/emailHeader"
+          },
+          {
+            "$ref": "#/parameters/passwordHeader"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -121,9 +52,67 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/emailHeader"
+          },
+          {
+            "$ref": "#/parameters/passwordHeader"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "type": "integer",
+                  "example": 22
+                },
+                "document": {
+                  "type": "string",
+                  "example": "98765432101234"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "dummypassword"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "example@gmail.com"
+                }
+              },
+              "required": [
+                "name",
+                "last_name",
+                "email",
+                "password",
+                "role",
+                "document",
+                "age"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -136,6 +125,12 @@
         ],
         "parameters": [
           {
+            "$ref": "#/parameters/emailHeader"
+          },
+          {
+            "$ref": "#/parameters/passwordHeader"
+          },
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -145,6 +140,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -155,15 +153,65 @@
         ],
         "parameters": [
           {
+            "$ref": "#/parameters/emailHeader"
+          },
+          {
+            "$ref": "#/parameters/passwordHeader"
+          },
+          {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "age": {
+                  "type": "integer",
+                  "example": 22
+                },
+                "document": {
+                  "type": "string",
+                  "example": "98765432101234"
+                },
+                "last_name": {
+                  "type": "string",
+                  "example": "Doe"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "John"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "dummypassword"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "example@gmail.com"
+                }
+              }
+            }
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       },
@@ -174,6 +222,12 @@
         ],
         "parameters": [
           {
+            "$ref": "#/parameters/emailHeader"
+          },
+          {
+            "$ref": "#/parameters/passwordHeader"
+          },
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -181,7 +235,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "OK"
           }
         }
