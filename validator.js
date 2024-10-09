@@ -1,77 +1,44 @@
-const { check, validationResult } = require('express-validator');
-const mongodb = require('./data/database');
+const { check } = require('express-validator');
 
 const validateLoginHeaders = [
-    check('email').exists().isEmail().withMessage('Invalid email address in headers'),
-    check('password')
-        .exists()
-        .isLength({ min: 6 })
-        .withMessage('Password must be at least 6 characters long in headers')
+    check('email').exists().isEmail().withMessage('Email is required and must be a valid email address.'),
+    check('password').exists().isString().withMessage('Password is required and must be a string.'),
 ];
 
-const getAdmin = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const extractedErrors = [];
-        errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
+const validateUserFields = (user) => {
+    const errors = [];
 
-        return res.status(422).json({
-            errors: extractedErrors,
-        });
+    if (!user.name || typeof user.name !== 'string') {
+        errors.push('Name is required and must be a string.');
     }
 
-    const { email, password } = req.headers;
-    try {
-        let db = mongodb.getDb();
-        const result = await db.collection('users').find({ email: email, password: password });
-        const users = await result.toArray();
-
-        if (users.length > 0 && users[0].role === 'admin') {
-            next();
-        }
-        else if (users.length > 0 && users[0].role !== 'admin') {
-            return res.status(401).json({ message: 'Only admins can retrieve that information' });
-        }
-        else {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
+    if (!user.last_name || typeof user.last_name !== 'string') {
+        errors.push('Last name is required and must be a string.');
     }
+
+    if (!user.age || typeof user.age !== 'number') {
+        errors.push('Age is required and must be a number.');
+    }
+
+    if (!user.document || typeof user.document !== 'string') {
+        errors.push('Document is required and must be a string.');
+    }
+
+    if (!user.password || typeof user.password !== 'string') {
+        errors.push('Password is required and must be a string.');
+    }
+
+    if (!user.github_id || typeof user.github_id !== 'string') {
+        errors.push('GitHub ID is required and must be a string.');
+    }
+
+    if (!user.location || typeof user.location !== 'string') {
+        errors.push('Location is required and must be a string.');
+    }
+
+    return errors;
 };
-
-const getLogin = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        const extractedErrors = [];
-        errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
-
-        return res.status(422).json({
-            errors: extractedErrors,
-        });
-    }
-
-    const { email, password } = req.headers;
-    try {
-        let db = mongodb.getDb();
-        const result = await db.collection('users').find({ email: email, password: password });
-        const users = await result.toArray();
-
-        if (users.length > 0) {
-            req.user = users[0];
-            req.role = users[0].role;
-            next();
-        } else {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
-    }
-    catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
-};
-
 module.exports = {
-    getAdmin,
-    getLogin,
-    validateLoginHeaders
+    validateUserFields,
+    validateLoginHeaders,
 };

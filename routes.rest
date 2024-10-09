@@ -88,36 +88,36 @@ password: isawapillaroflight
     "age": "22",
     "document": "98765432101234",
     "last_name": "Doe",
-    "name": "John",
+    "name": "John 2",
     "password": "dummypassword",
     "role": "admin",
     "email": "example@gmail.com"
 }
 
 ### PUT /users/66fb4624f0c67c4d63214ae5
-PUT https://cse341-project1-1-uaff.onrender.com/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+PUT https://cse341-project1-1-uaff.onrender.com/users/66fc9c3f971560206ccf657f HTTP/1.1
 Content-Type: application/json
 email: joesmith@gmail.com
 password: isawapillaroflight
 
 {
-    "age": "75"
+    "age": "90"
 }
 
 ### GET /users/66fb4624f0c67c4d63214ae5 (Using Admin Role)
-GET https://cse341-project1-1-uaff.onrender.com/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+GET https://cse341-project1-1-uaff.onrender.com/users/66fc9c3f971560206ccf657f HTTP/1.1
 Content-Type: application/json
 email: joesmith@gmail.com
 password: isawapillaroflight
 
 ### GET /users/66fb4624f0c67c4d63214ae6 (Using Customer Role)
-GET https://cse341-project1-1-uaff.onrender.com/users/66fb4624f0c67c4d63214ae6 HTTP/1.1
+GET https://cse341-project1-1-uaff.onrender.com/users/66fc9c3f971560206ccf657f HTTP/1.1
 Content-Type: application/json
 email: moroni.art.motta@gmail.com
 password: 123456789
 
 ### DELETE /users/66fb4624f0c67c4d63214ae5
-DELETE https://cse341-project1-1-uaff.onrender.com/users/66fb4624f0c67c4d63214ae5 HTTP/1.1
+DELETE https://cse341-project1-1-uaff.onrender.com/users/66fc9c3f971560206ccf657f HTTP/1.1
 Content-Type: application/json
 email: joesmith@gmail.com
 password: isawapillaroflight
