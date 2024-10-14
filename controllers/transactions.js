@@ -8,6 +8,9 @@ const getAccountTransactions = async (req, res, next) => {
         // swagger-tags=['Transactions']
         let db = mongodb.getDb();
         const id = req.params.userid;
+        if (req.session.dbUser._id.toString() !== id && req.session.dbUser.role !== 'admin') {
+            return res.status(403).json(createError(403, 'Forbidden'));
+        }
         const result = await
             db.collection(transactionsCollection).find({ user_id: id });
         const transactions = await result.toArray();
@@ -39,7 +42,7 @@ const createTransaction = async ( value, bank_account_id, user_id, description) 
         let db = mongodb.getDb();
         let transaction = {
             value: value,
-            account_id: bank_account_id,
+            bank_account_id: bank_account_id,
             user_id: user_id,
             date : new Date(),
             description :  description

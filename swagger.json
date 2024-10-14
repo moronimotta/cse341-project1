@@ -5,10 +5,10 @@
     "description": "Webservice for weeks 3-4",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "cse341-project1-1-uaff.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/bank-accounts/": {
@@ -19,12 +19,7 @@
           "application/json"
         ],
         "parameters": [
-          
-          {
-            "name": "password",
-            "in": "header",
-            "type": "string"
-          }
+      
         ],
         "responses": {
           "200": {
@@ -52,9 +47,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "user_id": {
-                  "example": "0000000"
-                },
                 "account_type": {
                   "example": "Checking"
                 
@@ -95,13 +87,7 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          
-          {
-            "name": "password",
-            "in": "header",
-            "type": "string"
-          }
+          } 
         ],
         "responses": {
           "200": {
@@ -143,9 +129,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "ballance": {
-                  "example": "any"
-                },
                 "user_id": {
                   "example": "any"
                 }
@@ -243,7 +226,7 @@
               "type": "object",
               "properties": {
                 "amount": {
-                  "example": "any"
+                  "example": 100
                 }
               }
             }
@@ -340,14 +323,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          
-          {
-            "name": "password",
-            "in": "header",
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -436,13 +412,8 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          
-          {
-            "name": "password",
-            "in": "header",
-            "type": "string"
           }
+        
         ],
         "responses": {
           "200": {
@@ -561,6 +532,40 @@
         "parameters": [
           {
             "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/document/{document}": {
+      "get": {
+        "tags": ["Users"],
+        "description": "Get user by document",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "document",
             "in": "path",
             "required": true,
             "type": "string"

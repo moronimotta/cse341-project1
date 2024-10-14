@@ -30,6 +30,23 @@ const getUser = async (req, res, next) => {
   }
 };
 
+// get user by document
+const getUserByDocument = async (req, res, next) => {
+  try {
+    // swagger-tags=['Users']
+    let db = mongodb.getDb();
+    const document = req.params.document;
+    const result = await db.collection(userCollection).find({ document: document });
+    const users = await result.toArray();
+
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(users[0]);
+  } catch (err) {
+    throw res.json(createError(500, err.message));
+  }
+};
+
+
 const setUserAsAdmin = async (req, res, next) => {
   try {
     // swagger-tags=['Users']
@@ -39,6 +56,7 @@ const setUserAsAdmin = async (req, res, next) => {
     await db.collection(userCollection).updateOne({ _id: new ObjectId(id) }, { $set: { role: role } });
 
     res.setHeader('Content-Type', 'application/json');
+    req.session.dbUser.role = role;
     res.status(204).send();
   } catch (err) {
     throw res.json(createError(500, err.message));
@@ -96,19 +114,19 @@ const updateUser = async (req, res, next) => {
     const users = await result.toArray();
 
     if (users.length === 0) {
-      throw res.json(createError(404, 'User not found'));
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    if ((users[0]._id.toString() !== user._id.toString() && role !== 'admin')) {        
-      throw res.json(createError(403, 'Forbidden'));
+    if ((users[0]._id.toString() !== req.session.dbUser._id  && role !== 'admin')) {        
+      return res.status(403).json({ message: 'Forbidden' });
     }
 
     await db.collection(userCollection).updateOne({ _id: new ObjectId(id) }, { $set: user });
 
     res.setHeader('Content-Type', 'application/json');
-    res.status(204).json(user);
+    return res.status(204).json(user);
   } catch (err) {
-    throw res.json(createError(500, err.message));
+    return res.status(500).json({ message: err.message });
   }
 };
 
@@ -155,5 +173,6 @@ module.exports = {
     deleteUser,
     getUserByGithubId,
     getUserByEmailAndPassword,
-    setUserAsAdmin
+    setUserAsAdmin,
+    getUserByDocument
 };

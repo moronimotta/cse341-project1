@@ -77,7 +77,8 @@
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" required>
+            <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8"
+                required>
         </div>
         <div class="form-group">
             <label for="age">Age:</label>
@@ -97,7 +98,8 @@
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+            <input type="email" id="email" name="email" placeholder="Enter your email" required
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
         </div>
         <input type="hidden" name="github_id" id="github_id" value="<%= githubId %>">
         <input type="submit" value="Submit">
@@ -112,7 +114,7 @@
             user.password = document.getElementById('password').value;
             user.age = parseInt(document.getElementById('age').value, 10);
             user.document = document.getElementById('document').value;
-            user.lastName = document.getElementById('last_name').value;
+            user.last_name = document.getElementById('last_name').value;
             user.location = document.getElementById('location').value;
             user.email = document.getElementById('email').value;
             user.github_id = document.getElementById('github_id').value;
@@ -121,13 +123,14 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': 'Bearer firstLoginPass' 
                 },
                 body: JSON.stringify(user)
             })
                 .then(response => {
                     if (!response.ok) {
                         return response.json().then(err => {
-                            throw new Error(err.message || 'Request failed');
+                            throw new Error(err.error + ': ' + JSON.stringify(err.errors));
                         });
                     }
                     return response.json();
@@ -136,8 +139,7 @@
                     window.location.href = '/';
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Error:', error);
+                    alert(error);
                 });
         });
     </script>
